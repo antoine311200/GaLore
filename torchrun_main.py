@@ -48,6 +48,7 @@ def parse_args(args):
     parser.add_argument("--weight_decay", type=float, default=0.0)
     parser.add_argument("--warmup_steps", type=int, default=1_000)
     parser.add_argument("--eval_every", type=int, default=5_000)
+    parser.add_argument("--target_eval_tokens", type=int, default=1_000_000)
     parser.add_argument("--num_training_steps", type=int, default=10_000,
                         help="Number of **update steps** to train for. "
                              "Notice that gradient accumulation is taken into account.")
@@ -97,7 +98,7 @@ def evaluate_model(model, preprocess_batched, pad_idx, global_rank, world_size, 
     )
     val_data_mapped.batch = lambda batch_size: training_utils.batch_fn(val_data_mapped, batch_size)
 
-    target_eval_tokens = 10_000_000
+    target_eval_tokens = args.target_eval_tokens
     evaluated_on_tokens = 0
     total_loss = torch.tensor(0.0).to(device)
     total_batches = 1
