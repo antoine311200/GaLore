@@ -444,7 +444,7 @@ def main(args):
             os.makedirs(args.save_dir, exist_ok=True)
 
             # Check if DistributedDataParallel is used
-            if not args.single_gpu:
+            if args.single_gpu:
                 model.save_pretrained(current_model_directory, max_shard_size='100GB')
             else:
                 model.module.save_pretrained(current_model_directory, max_shard_size='100GB')
@@ -525,7 +525,7 @@ def main(args):
         logger.info(f"Saving model and optimizer to {current_model_directory}, update step {update_step}")
         os.makedirs(args.save_dir, exist_ok=True)
 
-        if not args.single_gpu:
+        if args.single_gpu:
             model.save_pretrained(current_model_directory)
         else:
             model.module.save_pretrained(current_model_directory)
